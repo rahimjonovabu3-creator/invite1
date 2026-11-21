@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uchrashuv — DreamDay</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-cream: #F6F1EA;
+      --card-surface: #FAF7F2;
+      --crimson: #B8294A;
+      --crimson-dark: #961E3B;
+      --text-plum: #2D1E22;
+      --text-muted: #7C6A6E;
+      --border-soft: #E8DFD5;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-plum);
+      overflow-x: hidden;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .font-serif-luxury {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Orqa fondagi suzuvchi yurakchalar */
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(105vh) scale(0.8) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.35;
+      }
+      85% {
+        opacity: 0.35;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.15) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      color: #D8A3AE;
+      animation: floatHeart linear infinite;
+      user-select: none;
+    }
+
+    /* Asosiy karta soyasi va silliq o'tishlar */
+    .luxury-card {
+      background: linear-gradient(180deg, #FCF9F5 0%, #F7F1E8 100%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 24px 60px -15px rgba(74, 34, 43, 0.14), 0 4px 16px -4px rgba(74, 34, 43, 0.06);
+      border-radius: 30px;
+    }
+
+    .celebration-card {
+      background: linear-gradient(160deg, #C23153 0%, #9E1F3D 55%, #841731 100%);
+      box-shadow: 0 25px 65px -12px rgba(184, 41, 74, 0.45);
+      border-radius: 30px;
+    }
+
+    .step-panel {
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .step-hidden {
+      display: none !important;
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+    }
+
+    .step-visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      animation: fadeSlideIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slayder trek va tugmasi */
+    .slider-track {
+      background: #EFE7DD;
+      border: 1px solid #E3D8CC;
+      box-shadow: inset 0 2px 6px rgba(45, 30, 34, 0.06);
+      touch-action: none;
+      user-select: none;
+    }
+
+    .slider-fill {
+      background: linear-gradient(90deg, #C93658 0%, #B8294A 100%);
+      transition: width 0.05s linear;
+    }
+
+    .slider-thumb {
+      box-shadow: 0 4px 14px rgba(184, 41, 74, 0.28);
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.06);
+    }
+
+    /* Zarrachalar porlashi (3-bosqich) */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.85; transform: scale(1.25); }
+    }
+    .sparkle-dot {
+      animation: twinkle 2.4s ease-in-out infinite;
+    }
+
+    /* Qochuvchi "Yo'q" tugmasi animatsiyasi */
+    #noBtn {
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
+    }
+
+    #yesBtn {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F6F1EA;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D5C5BD;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 relative selection:bg-[#B8294A] selection:text-white">
+
+  <!-- Orqa fondagi suzuvchi yurakchalar konteyneri -->
+  <div id="heartsBg" aria-hidden="true"></div>
+
+  <!-- Xabarnoma (Toast) -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-3">
+    <div class="bg-[#2D1E22] text-[#FAF7F2] px-5 py-3 rounded-full shadow-xl text-sm font-medium flex items-center gap-2.5 border border-white/10">
+      <span class="text-[#F47291]">♥</span>
+      <span id="toastMessage">Xabar bajarildi</span>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- ASOSIY TAKLIFNOMA OQIMI (7 BOSQICH)                       -->
+  <!-- ========================================================= -->
+  <main id="invitationWrapper" class="w-full max-w-[440px] relative z-10 my-auto">
+
+    <!-- 0-BOSQICH: ISM KIRITISH OYNASI (ENG BIRINCHI PANEL) -->
+    <section id="step0" class="step-panel step-visible luxury-card px-7 py-10 sm:px-10 sm:py-12 text-center relative overflow-hidden">
+      <!-- Yuqori badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#EAE0D5] shadow-sm mb-6">
+        <span class="text-[#B8294A] text-xs">♥</span>
+        <span class="text-[11px] font-semibold tracking-[0.16em] text-[#7C6A6E] uppercase">MAXSUS TAKLIFNOMA</span>
+      </div>
+
+      <!-- Kichik romantik sarlavha -->
+      <p class="font-serif-luxury italic text-[#7C6A6E] text-base sm:text-lg mb-1">Assalomu alaykum!</p>
+      <h1 class="font-serif-luxury font-semibold text-3xl sm:text-[34px] text-[#2D1E22] leading-snug mb-3">
+        Ismingizni kiriting
+      </h1>
+      <p class="text-xs sm:text-sm text-[#6E5D61] leading-relaxed max-w-[280px] mx-auto mb-7">
+        <span id="displaySenderIntro" class="font-semibold text-[#B8294A]">Abdurahmon</span> siz uchun kichik bir syurpriz tayyorladi. Davom etish uchun ismingizni yozing:
+      </p>
+
+      <!-- Ism kiritish formasi -->
+      <form id="nameEntryForm" class="space-y-4 max-w-[300px] mx-auto mb-7">
+        <div class="relative">
+          <input
+            type="text"
+            id="visitorNameInput"
+            placeholder="Masalan: Madina..."
+            maxlength="40"
+            autocomplete="off"
+            required
+            class="w-full px-5 py-3.5 rounded-full bg-white border border-[#E2D6CA] text-center text-base font-medium text-[#2D1E22] placeholder-[#A59699] shadow-sm focus:outline-none focus:border-[#B8294A] focus:ring-2 focus:ring-[#B8294A]/15 transition-all"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3.5 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-[0.14em] uppercase shadow-lg shadow-[#B8294A]/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
+        >
+          <span>DAVOM ETISH</span>
+          <span>→</span>
+        </button>
+      </form>
+
+      <!-- Pastki imzo -->
+      <p class="text-[11px] font-semibold tracking-[0.18em] text-[#8E7D81] uppercase">
+        KIMDAN: <span id="displaySenderWelcome">ABDURAHMON</span>
+      </p>
+    </section>
+
+    <!-- 1-BOSQICH: MUQOVA (Yurak bo'laklarini birlashtirish) -->
+    <section id="step1" class="step-panel step-hidden luxury-card px-7 py-10 sm:px-10 sm:py-12 text-center relative overflow-hidden">
+      <!-- Yuqori badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#EAE0D5] shadow-sm mb-7">
+        <span class="text-[#B8294A] text-xs">♥</span>
+        <span class="text-[11px] font-semibold tracking-[0.16em] text-[#7C6A6E] uppercase">FAQAT BIZ UCHUN</span>
+      </div>
+
+      <!-- Kichik sarlavha -->
+      <p class="font-serif-luxury italic text-[#7C6A6E] text-base sm:text-lg mb-1">Salom, bu alohida taklif</p>
+      
+      <!-- Qabul qiluvchi ismi -->
+      <h1 id="displayRecipientCover" class="font-serif-luxury italic font-semibold text-4xl sm:text-5xl text-[#B8294A] tracking-tight mb-8">
+        Aziz Mehmon
+      </h1>
+
+      <!-- Bo'lingan yurak animatsiyasi (SVG) -->
+      <div class="relative w-32 h-28 mx-auto mb-7 flex items-center justify-center">
+        <svg viewBox="0 0 140 120" class="w-full h-full overflow-visible drop-shadow-sm">
+          <!-- Chap yurak bo'lagi -->
+          <g id="heartLeft" style="transform: translate(-10px, -2px) rotate(-6deg); transform-origin: 70px 65px; transition: transform 0.08s ease-out;">
+            <path d="M70 104 C70 104 18 72 18 38 C18 20 32 10 47 10 C58 10 66 17 70 25 L66 44 L73 61 L67 80 L70 104 Z" fill="#B8294A"/>
+          </g>
+          <!-- O'ng yurak bo'lagi -->
+          <g id="heartRight" style="transform: translate(10px, 2px) rotate(6deg); transform-origin: 70px 65px; transition: transform 0.08s ease-out;">
+            <path d="M70 104 C70 104 122 72 122 38 C122 20 108 10 93 10 C82 10 74 17 70 25 L66 44 L73 61 L67 80 L70 104 Z" fill="#C83759"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Yo'riqnoma matni -->
+      <p class="text-[13px] sm:text-sm text-[#6E5D61] leading-relaxed max-w-[270px] mx-auto mb-8">
+        Yurakning ikki bo‘lagini birlashtiring — kichkina savolim sizni kutyapti.
+      </p>
+
+      <!-- Surib ochish slayderi -->
+      <div id="sliderTrack" class="slider-track relative w-full h-14 rounded-full flex items-center justify-center overflow-hidden mb-8">
+        <!-- Qizil to'ldiruvchi qatlam -->
+        <div id="sliderFill" class="slider-fill absolute left-0 top-0 bottom-0 w-0 rounded-full pointer-events-none"></div>
+        
+        <!-- Slayder matni -->
+        <span id="sliderLabel" class="relative z-10 text-[11px] font-semibold tracking-[0.14em] text-[#6E5D61] uppercase pl-7 transition-colors duration-150 pointer-events-none">
+          OCHISH UCHUN SURING
+        </span>
+
+        <!-- Suriladigan yurak tugmasi -->
+        <div id="sliderThumb" class="slider-thumb absolute left-1.5 w-11 h-11 rounded-full bg-white flex items-center justify-center z-20">
+          <span class="text-[#B8294A] text-base leading-none">♥</span>
+        </div>
+      </div>
+
+      <!-- Pastki imzo -->
+      <p class="text-[11px] font-semibold tracking-[0.18em] text-[#8E7D81] uppercase">
+        KIMDAN: <span id="displaySenderCover">ABDURAHMON</span>
+      </p>
+    </section>
+
+    <!-- 2-BOSQICH: SAVOL VA QOCHUVCHI "YO'Q" TUGMASI -->
+    <section id="step2" class="step-panel step-hidden luxury-card px-7 py-9 sm:px-10 sm:py-11 text-center relative overflow-visible min-h-[430px] flex flex-col justify-between">
+      <!-- Yuqori qator: Sarlavha va qochish hisoblagichi -->
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-[11px] font-semibold tracking-[0.15em] text-[#8E7D81] uppercase">BITTA KICHKINA SAVOL</span>
+        <span id="dodgeCounter" class="px-3 py-1 rounded-full bg-white border border-[#EAE0D5] text-xs font-semibold text-[#8E7D81] shadow-sm transition-all">
+          +000
+        </span>
+      </div>
+
+      <!-- Asosiy savol qismi -->
+      <div class="my-auto py-4">
+        <p id="displayQuestionSub" class="text-xs sm:text-sm text-[#7C6A6E] leading-relaxed max-w-[290px] mx-auto mb-5">
+          Sizga kichkina taklifim bor — balki bizning eng yoqimli xotiralarimizdan biriga aylanar.
+        </p>
+
+        <h2 id="displayMainQuestion" class="font-serif-luxury font-medium text-3xl sm:text-[34px] leading-snug text-[#2D1E22] mb-10">
+          Aziz Mehmon,<br>men bilan uchrashuvga chiqasanmi?
+        </h2>
+
+        <!-- Tugmalar maydoni -->
+        <div id="buttonsArena" class="relative flex items-center justify-center gap-4 min-h-[64px]">
+          <!-- HA tugmasi -->
+          <button id="yesBtn" type="button" class="px-8 py-3.5 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-sm tracking-wide shadow-lg shadow-[#B8294A]/30 flex items-center gap-2 z-20 cursor-pointer">
+            <span>♥</span>
+            <span>HA</span>
+          </button>
+
+          <!-- Qochuvchi YO'Q tugmasi -->
+          <button id="noBtn" type="button" class="px-7 py-3.5 rounded-full bg-white hover:bg-[#FDFBF9] text-[#5C4B4F] border border-[#E2D6CA] font-medium text-sm shadow-sm z-30 cursor-pointer select-none whitespace-nowrap">
+            Yo‘q
+          </button>
+        </div>
+      </div>
+
+      <div class="h-2"></div>
+    </section>
+
+    <!-- 3-BOSQICH: ROZILIK QABUL QILINDI (TABRIK EKRANI) -->
+    <section id="step3" class="step-panel step-hidden celebration-card px-7 py-12 sm:px-10 sm:py-14 text-center text-white relative overflow-hidden">
+      <!-- Dekorativ porlovchi nuqtalar -->
+      <div class="sparkle-dot absolute top-14 left-12 w-2 h-2 rounded-full bg-white/60"></div>
+      <div class="sparkle-dot absolute top-24 right-14 w-1.5 h-1.5 rounded-full bg-white/50" style="animation-delay: 0.6s;"></div>
+      <div class="sparkle-dot absolute bottom-24 left-16 w-2 h-2 rounded-full bg-white/40" style="animation-delay: 1.2s;"></div>
+      <div class="sparkle-dot absolute bottom-20 right-12 w-2.5 h-2.5 rounded-full bg-white/50" style="animation-delay: 1.8s;"></div>
+
+      <!-- Yuqori oq doira va yurak -->
+      <div class="w-16 h-16 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center mx-auto mb-7 p-2">
+        <div class="w-full h-full rounded-full bg-white flex items-center justify-center shadow-md">
+          <span class="text-[#B8294A] text-xl">♥</span>
+        </div>
+      </div>
+
+      <p class="text-[11px] font-semibold tracking-[0.18em] text-white/80 uppercase mb-3">
+        ROZILIK QABUL QILINDI
+      </p>
+
+      <h2 id="displayCelebrateTitle" class="font-serif-luxury italic font-semibold text-4xl sm:text-[42px] leading-tight mb-4">
+        Ajoyib, uchrashamiz!
+      </h2>
+
+      <p id="displayCelebrateSub" class="text-sm text-white/85 leading-relaxed max-w-[280px] mx-auto mb-9">
+        Endi kunni tanlang, bizning yoqimli oqshomimizni birga rejalashtiramiz.
+      </p>
+
+      <button id="goToStep4Btn" type="button" class="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-[#B8294A] hover:bg-[#FAF7F2] font-semibold text-xs tracking-[0.1em] uppercase shadow-xl transition-transform active:scale-95 cursor-pointer">
+        <span>REJANI TANLAYMIZ</span>
+        <span>📅</span>
+      </button>
+    </section>
+
+    <!-- 4-BOSQICH: KUN VA VAQTNI TANLASH (1/2) -->
+    <section id="step4" class="step-panel step-hidden luxury-card px-6 py-8 sm:px-9 sm:py-10 relative">
+      <!-- Yuqori progress -->
+      <div class="flex items-center justify-between mb-5">
+        <span class="text-[10px] sm:text-[11px] font-semibold tracking-[0.14em] text-[#8E7D81] uppercase">KELISHUVNI CHIROYLI QILAMIZ</span>
+        <div class="flex items-center gap-1.5">
+          <span class="w-5 h-1.5 rounded-full bg-[#B8294A]"></span>
+          <span class="w-3 h-1.5 rounded-full bg-[#DFD3C8]"></span>
+          <span class="text-[11px] font-semibold text-[#8E7D81] ml-1">1/2</span>
+        </div>
+      </div>
+
+      <h2 class="font-serif-luxury font-medium text-2xl sm:text-[30px] text-[#2D1E22] mb-5">
+        Kun va vaqtni tanlang
+      </h2>
+
+      <p class="text-[11px] font-semibold tracking-[0.14em] text-[#8E7D81] uppercase mb-3">
+        QACHON UCHRASHAMIZ?
+      </p>
+
+      <!-- Tayyor sana variantlari ro'yxati -->
+      <div id="dateOptionsList" class="space-y-2.5 mb-4">
+        <!-- JS orqali to'ldiriladi -->
+      </div>
+
+      <!-- YOKI ajratuvchisi -->
+      <div class="relative flex py-2 items-center mb-3">
+        <div class="flex-grow border-t border-[#E6DCD2]"></div>
+        <span class="flex-shrink mx-3 text-[10px] font-semibold tracking-[0.16em] text-[#9B8B8F] uppercase">YOKI</span>
+        <div class="flex-grow border-t border-[#E6DCD2]"></div>
+      </div>
+
+      <!-- O'ziga qulay vaqtni tanlash -->
+      <div id="customDateWrapper" class="rounded-2xl bg-white/80 border border-[#E6DCD2] p-3.5 transition-all mb-6">
+        <label class="flex items-center justify-between cursor-pointer select-none">
+          <div class="flex items-center gap-3">
+            <span class="text-[#8E7D81]">📅</span>
+            <span class="text-sm font-medium text-[#2D1E22]">O‘zimga qulay vaqtni tanlayman</span>
+          </div>
+          <input type="radio" name="dateChoice" value="custom" id="customDateRadio" class="sr-only">
+          <span id="customDateCheck" class="w-5 h-5 rounded-full border-2 border-[#D4C6BA] flex items-center justify-center transition-colors">
+            <span class="w-2.5 h-2.5 rounded-full bg-white opacity-0 transition-opacity"></span>
+          </span>
+        </label>
+
+        <!-- Yashirin sana/vaqt kiritish maydoni -->
+        <div id="customDateInputs" class="hidden grid-cols-2 gap-2.5 mt-3.5 pt-3 border-t border-[#EFE7DE]">
+          <div>
+            <label class="block text-[11px] text-[#7C6A6E] mb-1">Sana</label>
+            <input type="date" id="customDateVal" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#E2D6CA] text-xs font-medium text-[#2D1E22] focus:outline-none focus:border-[#B8294A]">
+          </div>
+          <div>
+            <label class="block text-[11px] text-[#7C6A6E] mb-1">Vaqt</label>
+            <input type="time" id="customTimeVal" value="18:30" class="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#E2D6CA] text-xs font-medium text-[#2D1E22] focus:outline-none focus:border-[#B8294A]">
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyingi tugmasi -->
+      <button id="goToStep5Btn" type="button" class="w-full py-4 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-[0.12em] uppercase shadow-lg shadow-[#B8294A]/25 transition-all active:scale-[0.99] cursor-pointer">
+        KEYINGI — REJANI TANLASH →
+      </button>
+    </section>
+
+    <!-- 5-BOSQICH: REJA VA TILAKNI TANLASH (2/2) -->
+    <section id="step5" class="step-panel step-hidden luxury-card px-6 py-8 sm:px-9 sm:py-10 relative">
+      <!-- Yuqori navigatsiya va progress -->
+      <div class="flex items-center justify-between mb-5">
+        <button id="backToStep4Btn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-[#E6DCD2] text-xs font-medium text-[#6E5D61] hover:text-[#2D1E22] transition-colors cursor-pointer">
+          <span>←</span>
+          <span>Vaqtga qaytish</span>
+        </button>
+        <div class="flex items-center gap-1.5">
+          <span class="w-3 h-1.5 rounded-full bg-[#B8294A]"></span>
+          <span class="w-5 h-1.5 rounded-full bg-[#B8294A]"></span>
+          <span class="text-[11px] font-semibold text-[#8E7D81] ml-1">2/2</span>
+        </div>
+      </div>
+
+      <h2 class="font-serif-luxury font-medium text-2xl sm:text-[30px] text-[#2D1E22] mb-3">
+        Reja va tilakni tanlang
+      </h2>
+
+      <!-- Tanlangan sana badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E6DCD2] text-xs font-medium text-[#5C4B4F] mb-6">
+        <span class="text-[#B8294A]">📅</span>
+        <span id="chosenDateBadge">22-Noyabr, Yakshanba • 19:00</span>
+      </div>
+
+      <p class="text-[11px] font-semibold tracking-[0.14em] text-[#8E7D81] uppercase mb-3">
+        NIMA QILAMIZ?
+      </p>
+
+      <!-- 2x2 Mashg'ulotlar gridi -->
+      <div id="activitiesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6">
+        <!-- JS orqali to'ldiriladi -->
+      </div>
+
+      <!-- Ixtiyoriy izoh -->
+      <div class="mb-6">
+        <label for="optionalNote" class="block text-[11px] font-semibold tracking-[0.12em] text-[#8E7D81] uppercase mb-2">
+          SIZDAN BIR-IKKI OG‘IZ — IXTIYORIY
+        </label>
+        <textarea id="optionalNote" rows="2" maxlength="300" placeholder="Qisqa javob yozishingiz mumkin..." class="w-full px-4 py-3 rounded-2xl bg-white/90 border border-[#E6DCD2] text-sm text-[#2D1E22] placeholder-[#A59699] focus:outline-none focus:border-[#B8294A] resize-none"></textarea>
+        <div class="text-right text-[11px] text-[#9B8B8F] mt-1">
+          <span id="charCount">0</span>/300
+        </div>
+      </div>
+
+      <!-- Tasdiqlash tugmasi -->
+      <button id="confirmDateBtn" type="button" class="w-full py-4 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-[0.12em] uppercase shadow-lg shadow-[#B8294A]/25 flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer">
+        <span>UCHRASHUVNI TASDIQLASH</span>
+        <span>✈️</span>
+      </button>
+    </section>
+
+    <!-- 6-BOSQICH: YAKUNIY TASDIQ XATI -->
+    <section id="step6" class="step-panel step-hidden luxury-card px-6 py-8 sm:px-9 sm:py-10 text-center relative">
+      <p class="text-[11px] font-semibold tracking-[0.16em] text-[#8E7D81] uppercase mb-1.5">
+        REJAMIZ TAYYOR
+      </p>
+      <h2 class="font-serif-luxury italic font-medium text-3xl sm:text-[34px] text-[#2D1E22] mb-6">
+        Biz uchun kichkina xat
+      </h2>
+
+      <!-- Ichki maktub kartasi -->
+      <div class="bg-white/95 border border-[#ECE2D8] rounded-3xl p-6 text-left relative shadow-sm mb-6">
+        <!-- O'ng yuqori burchakdagi yurak badge -->
+        <div class="absolute -top-3.5 right-5 w-10 h-10 rounded-full bg-[#FAF2F4] border border-[#F1DCE2] flex items-center justify-center shadow-sm">
+          <span class="text-[#B8294A] text-sm">♥</span>
+        </div>
+
+        <h3 class="font-serif-luxury italic font-semibold text-xl text-[#2D1E22] mb-2.5">
+          Aziz <span id="letterRecipient">Mehmon</span>,
+        </h3>
+
+        <p class="text-xs sm:text-[13px] text-[#5C4B4F] leading-relaxed mb-4">
+          Endi hammasi aniq: uchrashuvimiz belgilandi. Bu rejani asrab qo‘yaman. O‘sha kunni intiqlik bilan kutaman.
+        </p>
+
+        <!-- Tanlangan reja tafsilotlari -->
+        <div class="rounded-2xl bg-[#FAF7F2] border border-[#EDE4DA] p-3.5 space-y-2 mb-4">
+          <div class="flex items-center gap-2.5 text-xs font-medium text-[#2D1E22]">
+            <span class="text-[#B8294A]">📅</span>
+            <span id="letterDate">22-Noyabr, Yakshanba</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs font-medium text-[#2D1E22]">
+            <span class="text-[#B8294A]">🕒</span>
+            <span id="letterTime">19:00</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs font-medium text-[#2D1E22]">
+            <span class="text-[#B8294A]">✨</span>
+            <span id="letterActivity">Qahva va uzoq suhbat</span>
+          </div>
+          <div id="letterNoteRow" class="hidden pt-2 mt-2 border-t border-[#E8DFD5] text-xs text-[#6E5D61] italic">
+            “<span id="letterNoteText"></span>”
+          </div>
+        </div>
+
+        <p class="text-xs text-[#6E5D61] leading-relaxed mb-2">
+          Bu oqshom biz uchun ajoyib xotiraga aylanishiga ishonaman.
+        </p>
+        <p class="font-serif-luxury italic font-semibold text-base text-[#2D1E22]">
+          — <span id="letterSender">Abdurahmon</span> <span class="text-[#B8294A] not-italic">♥</span>
+        </p>
+      </div>
+
+      <!-- Ulashish tugmasi -->
+      <button id="shareResultBtn" type="button" class="w-full py-4 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-[0.12em] uppercase shadow-lg shadow-[#B8294A]/25 flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer mb-5">
+        <span>🔗</span>
+        <span>YAXSHI XABARNI ULASHISH</span>
+      </button>
+
+      <!-- Qayta ko'rish havolasi -->
+      <button id="restartBtn" type="button" class="text-[11px] text-[#8E7D81] hover:text-[#B8294A] underline underline-offset-4 transition-colors cursor-pointer">
+        Taklifnomani boshidan ko‘rish
+      </button>
+    </section>
+
+    <!-- Pastki yashirin kirish triggeri (5 marta bosilsa Admin Panel ochiladi) -->
+    <footer class="text-center mt-5">
+      <button id="secretAdminTrigger" type="button" class="text-[10px] font-semibold tracking-[0.2em] text-[#9A898D]/80 hover:text-[#7C6A6E] uppercase transition-colors cursor-pointer select-none">
+        ILIQLIK BILAN YARATILDI • DREAMDAY
+      </button>
+    </footer>
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- YASHIRIN ADMIN PANEL MODAL / SAHIFASI                     -->
+  <!-- ========================================================= -->
+  <div id="adminOverlay" class="fixed inset-0 z-50 bg-[#2D1E22]/60 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-[#FAF7F2] border border-[#E6DCD2] rounded-[28px] w-full max-w-2xl shadow-2xl overflow-hidden my-auto">
+      
+      <!-- Admin Header -->
+      <div class="bg-white px-6 py-4 border-b border-[#EAE0D5] flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-full bg-[#B8294A]/10 text-[#B8294A] flex items-center justify-center font-bold text-sm">♥</span>
+          <div>
+            <h2 class="font-serif-luxury font-bold text-lg text-[#2D1E22]">DreamDay — Admin Panel</h2>
+            <p class="text-[11px] text-[#7C6A6E]">Taklifnomani sozlash va javoblarni ko‘rish</p>
+          </div>
+        </div>
+        <button id="closeAdminBtn" type="button" class="w-9 h-9 rounded-full bg-[#F6F1EA] hover:bg-[#EAE0D5] text-[#2D1E22] flex items-center justify-center text-lg transition-colors cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <!-- 1. PAROL BILAN KIRISH EKRANI -->
+      <div id="adminLoginView" class="p-8 text-center max-w-sm mx-auto">
+        <div class="w-14 h-14 rounded-full bg-[#B8294A]/10 text-[#B8294A] flex items-center justify-center mx-auto mb-4 text-xl">
+          🔒
+        </div>
+        <h3 class="font-serif-luxury font-semibold text-2xl text-[#2D1E22] mb-2">Admin kirish</h3>
+        <p class="text-xs text-[#7C6A6E] mb-6">
+          Boshqaruv paneliga kirish uchun parolni kiriting.<br>
+          <span class="text-[11px] text-[#9B8B8F]">(Boshlang‘ich parol: <code class="bg-white px-1.5 py-0.5 rounded border border-[#E6DCD2] text-[#B8294A] font-semibold">admin123</code>)</span>
+        </p>
+
+        <form id="adminLoginForm" class="space-y-3">
+          <input type="password" id="adminPasswordInput" placeholder="Parolni kiriting..." required class="w-full px-4 py-3 rounded-2xl bg-white border border-[#E2D6CA] text-sm text-center focus:outline-none focus:border-[#B8294A]">
+          <p id="loginErrorMsg" class="hidden text-xs text-[#B8294A] font-medium">Parol noto‘g‘ri! Qaytadan urinib ko‘ring.</p>
+          <button type="submit" class="w-full py-3.5 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-wider uppercase shadow-md cursor-pointer">
+            KIRISH
+          </button>
+        </form>
+      </div>
+
+      <!-- 2. ASOSIY ADMIN BOSHQARUV PANELI -->
+      <div id="adminDashboardView" class="hidden">
+        <!-- Tablar -->
+        <div class="flex border-b border-[#EAE0D5] bg-[#F6F1EA] px-6 pt-3 gap-2">
+          <button type="button" data-tab="settings" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs font-semibold bg-[#FAF7F2] text-[#B8294A] border-t border-x border-[#EAE0D5] cursor-pointer">
+            ⚙️ Taklifnomani tahrirlash
+          </button>
+          <button type="button" data-tab="responses" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs font-semibold text-[#7C6A6E] hover:text-[#2D1E22] cursor-pointer flex items-center gap-1.5">
+            <span>💌 Kelgan javoblar</span>
+            <span id="responsesCountBadge" class="px-2 py-0.5 rounded-full bg-[#B8294A] text-white text-[10px]">0</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: SOZLAMALAR -->
+        <div id="tabSettings" class="p-6 max-h-[72vh] overflow-y-auto space-y-5">
+          <!-- Ismlar -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#5C4B4F] mb-1.5">Standart ism (agar kiritilmasa)</label>
+              <input type="text" id="cfgRecipient" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E2D6CA] text-sm focus:outline-none focus:border-[#B8294A]">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#5C4B4F] mb-1.5">Kimdan (Yuboruvchi ismi)</label>
+              <input type="text" id="cfgSender" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E2D6CA] text-sm focus:outline-none focus:border-[#B8294A]">
+            </div>
+          </div>
+
+          <!-- Savol ostidagi matn -->
+          <div>
+            <label class="block text-xs font-semibold text-[#5C4B4F] mb-1.5">Savol ustidagi izoh matni</label>
+            <input type="text" id="cfgQuestionSub" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E2D6CA] text-sm focus:outline-none focus:border-[#B8294A]">
+          </div>
+
+          <!-- 3 ta tayyor sana variantlari -->
+          <div>
+            <label class="block text-xs font-semibold text-[#5C4B4F] mb-2">Taklif qilinadigan 3 ta kun va vaqt</label>
+            <div class="space-y-2">
+              <div class="grid grid-cols-3 gap-2">
+                <input type="text" id="cfgDate1" placeholder="18-Noyabr, Chorshanba" class="col-span-2 px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+                <input type="text" id="cfgTime1" placeholder="18:30" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <input type="text" id="cfgDate2" placeholder="20-Noyabr, Juma" class="col-span-2 px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+                <input type="text" id="cfgTime2" placeholder="17:00" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <input type="text" id="cfgDate3" placeholder="22-Noyabr, Yakshanba" class="col-span-2 px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+                <input type="text" id="cfgTime3" placeholder="19:00" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 ta mashg'ulot variantlari -->
+          <div>
+            <label class="block text-xs font-semibold text-[#5C4B4F] mb-2">4 ta reja / mashg‘ulot variantlari</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input type="text" id="cfgAct1" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              <input type="text" id="cfgAct2" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              <input type="text" id="cfgAct3" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+              <input type="text" id="cfgAct4" class="px-3 py-2 rounded-xl bg-white border border-[#E2D6CA] text-xs">
+            </div>
+          </div>
+
+          <!-- Admin parolini yangilash -->
+          <div class="pt-2 border-t border-[#EAE0D5]">
+            <label class="block text-xs font-semibold text-[#5C4B4F] mb-1.5">Yangi Admin Paroli (ixtiyoriy)</label>
+            <input type="text" id="cfgNewPassword" placeholder="O'zgartirmaslik uchun bo'sh qoldiring" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E2D6CA] text-xs focus:outline-none focus:border-[#B8294A]">
+          </div>
+
+          <!-- Maxsus havola yaratish qismi -->
+          <div class="p-4 rounded-2xl bg-white border border-[#E6DCD2] space-y-2">
+            <p class="text-xs font-semibold text-[#2D1E22]">🔗 Shaxsiy taklifnoma havolasi:</p>
+            <p class="text-[11px] text-[#7C6A6E]">Bu havolani yuborsangiz, ismlar avtomatik o‘rnatilgan holda ochiladi:</p>
+            <div class="flex gap-2">
+              <input type="text" id="shareableLinkBox" readonly class="flex-1 px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#E2D6CA] text-[11px] text-[#5C4B4F]">
+              <button type="button" id="copyShareLinkBtn" class="px-4 py-2 rounded-xl bg-[#2D1E22] text-white text-xs font-medium hover:bg-black cursor-pointer">
+                Nusxa olish
+              </button>
+            </div>
+          </div>
+
+          <!-- Saqlash tugmalari -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <button type="button" id="resetDefaultBtn" class="px-4 py-2.5 rounded-full border border-[#D8C9BE] text-xs font-medium text-[#7C6A6E] hover:text-[#2D1E22] cursor-pointer">
+              Standart holatga qaytarish
+            </button>
+            <button type="button" id="saveAdminSettingsBtn" class="px-6 py-3 rounded-full bg-[#B8294A] hover:bg-[#9E1F3D] text-white font-semibold text-xs tracking-wider uppercase shadow-md cursor-pointer">
+              💾 Saqlash va qo‘llash
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: KELGAN JAVOBLAR -->
+        <div id="tabResponses" class="hidden p-6 max-h-[72vh] overflow-y-auto">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-xs text-[#7C6A6E]">Taklifnoma tasdiqlanganda barcha javoblar shu yerda saqlanadi.</p>
+            <button type="button" id="clearResponsesBtn" class="text-xs text-[#B8294A] hover:underline font-medium cursor-pointer">
+              Barchasini tozalash
+            </button>
+          </div>
+
+          <div id="responsesListContainer" class="space-y-3">
+            <!-- JS orqali javoblar ro'yxati chiqariladi -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT MANTIQI                                        -->
+  <!-- ========================================================= -->
+  <script>
+    (function () {
+      // --- 1. STANDART SOZLAMALAR VA HOLAT ---
+      const DEFAULT_CONFIG = {
+        recipient: "",
+        sender: "Abdurahmon",
+        questionSub: "Sizga kichkina taklifim bor — balki bizning eng yoqimli xotiralarimizdan biriga aylanar.",
+        dates: [
+          { date: "18-Noyabr, Chorshanba", time: "18:30" },
+          { date: "20-Noyabr, Juma", time: "17:00" },
+          { date: "22-Noyabr, Yakshanba", time: "19:00" }
+        ],
+        activities: [
+          "☕ Qahva va uzoq suhbat",
+          "🎬 Kino va sayr",
+          "🍽️ Ikki kishilik kechki ovqat",
+          "🎳 Bouling yoki ko‘ngilochar o‘yin"
+        ],
+        adminPassword: "admin123"
+      };
+
+      const STORAGE_CONFIG_KEY = "dreamday_config_v2";
+      const STORAGE_RESPONSES_KEY = "dreamday_responses_v1";
+
+      let appConfig = loadConfig();
+      let visitorName = "";
+      let dodgeCount = 0;
+      let selectedDateObj = { ...appConfig.dates[2] }; // Standart 3-variant
+      let selectedActivity = appConfig.activities[0];
+
+      // URL parametrlari orqali ismlarni o'qish (?to=...&from=...)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("from")) appConfig.sender = urlParams.get("from");
+      if (urlParams.get("to")) {
+        visitorName = urlParams.get("to").trim();
+      } else if (appConfig.recipient) {
+        visitorName = appConfig.recipient.trim();
+      }
+
+      // --- YORDAMCHI FUNKSIYALAR ---
+      function loadConfig() {
+        try {
+          const saved = localStorage.getItem(STORAGE_CONFIG_KEY);
+          if (saved) {
+            return { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+          }
+        } catch (e) {
+          console.error("Sozlamalarni o'qishda xatolik:", e);
+        }
+        return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+      }
+
+      function saveConfig(newCfg) {
+        appConfig = newCfg;
+        localStorage.setItem(STORAGE_CONFIG_KEY, JSON.stringify(appConfig));
+        if (appConfig.recipient && !visitorName) {
+          visitorName = appConfig.recipient;
+        }
+        applyConfigToUI();
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toastMessage");
+        toastMsg.textContent = msg;
+        toast.classList.remove("opacity-0", "-translate-y-3");
+        toast.classList.add("opacity-100", "translate-y-0");
+        setTimeout(() => {
+          toast.classList.remove("opacity-100", "translate-y-0");
+          toast.classList.add("opacity-0", "-translate-y-3");
+        }, 2800);
+      }
+
+      function copyTextToClipboard(text) {
+        const tempInput = document.createElement("textarea");
+        tempInput.value = text;
+        tempInput.style.position = "fixed";
+        tempInput.style.opacity = "0";
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+          document.execCommand("copy");
+          showToast("Nusxa olindi! Endi yuborishingiz mumkin.");
+        } catch (err) {
+          showToast("Nusxa olishda xatolik yuz berdi.");
+        }
+        document.body.removeChild(tempInput);
+      }
+
+      function goToStep(stepNumber) {
+        for (let i = 0; i <= 6; i++) {
+          const el = document.getElementById("step" + i);
+          if (!el) continue;
+          if (i === stepNumber) {
+            el.classList.remove("step-hidden");
+            el.classList.add("step-visible");
+          } else {
+            el.classList.remove("step-visible");
+            el.classList.add("step-hidden");
+          }
+        }
+      }
+
+      // --- ORQA FONDAGI SUZUVCHI YURAKCHALAR ---
+      function initFloatingHearts() {
+        const container = document.getElementById("heartsBg");
+        const symbols = ["♥", "♡"];
+        for (let i = 0; i < 16; i++) {
+          const span = document.createElement("span");
+          span.className = "floating-heart";
+          span.textContent = symbols[i % 2];
+          span.style.left = Math.random() * 96 + "vw";
+          span.style.fontSize = (12 + Math.random() * 14) + "px";
+          span.style.animationDuration = (14 + Math.random() * 14) + "s";
+          span.style.animationDelay = (-Math.random() * 20) + "s";
+          container.appendChild(span);
+        }
+      }
+
+      // --- SOZLAMALARNI INTERFEYSGA QO'LLASH ---
+      function applyConfigToUI() {
+        const activeRecipient = visitorName || appConfig.recipient || "Azizim";
+        const activeSender = appConfig.sender || "Abdurahmon";
+
+        // 0-bosqich (Ism kiritish oynasi)
+        document.getElementById("displaySenderIntro").textContent = activeSender;
+        document.getElementById("displaySenderWelcome").textContent = activeSender.toUpperCase();
+        const nameInput = document.getElementById("visitorNameInput");
+        if (nameInput && visitorName && !nameInput.value) {
+          nameInput.value = visitorName;
+        }
+
+        // 1-bosqich va keyingi barcha oynalar
+        document.getElementById("displayRecipientCover").textContent = activeRecipient;
+        document.getElementById("displaySenderCover").textContent = activeSender.toUpperCase();
+        document.getElementById("displayQuestionSub").textContent = appConfig.questionSub;
+        document.getElementById("displayMainQuestion").innerHTML = `${escapeHtml(activeRecipient)},<br>men bilan uchrashuvga chiqasanmi?`;
+        document.getElementById("letterRecipient").textContent = activeRecipient;
+        document.getElementById("letterSender").textContent = activeSender;
+
+        renderDateOptions();
+        renderActivityOptions();
+      }
+
+      // --- 0-BOSQICH: ISM KIRITISH FORMASI ---
+      function initNameEntry() {
+        const form = document.getElementById("nameEntryForm");
+        const input = document.getElementById("visitorNameInput");
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const enteredName = input.value.trim();
+          if (!enteredName) {
+            showToast("Iltimos, davom etish uchun ismingizni kiriting");
+            input.focus();
+            return;
+          }
+          visitorName = enteredName;
+          applyConfigToUI();
+          goToStep(1);
+        });
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      // --- 1-BOSQICH: SLIDE-TO-UNLOCK MANTIQI ---
+      function initSlider() {
+        const track = document.getElementById("sliderTrack");
+        const thumb = document.getElementById("sliderThumb");
+        const fill = document.getElementById("sliderFill");
+        const label = document.getElementById("sliderLabel");
+        const heartLeft = document.getElementById("heartLeft");
+        const heartRight = document.getElementById("heartRight");
+
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+
+        function updateVisuals(progress) {
+          // progress: 0 dan 1 gacha
+          const maxTravel = track.clientWidth - thumb.clientWidth - 12;
+          const px = progress * maxTravel;
+          thumb.style.transform = `translateX(${px}px)`;
+          fill.style.width = `${px + thumb.clientWidth + 6}px`;
+
+          // Yurak bo'laklarini yaqinlashtirish
+          const offset = (1 - progress) * 10;
+          const rot = (1 - progress) * 6;
+          heartLeft.style.transform = `translate(${-offset}px, ${-offset * 0.2}px) rotate(${-rot}deg)`;
+          heartRight.style.transform = `translate(${offset}px, ${offset * 0.2}px) rotate(${rot}deg)`;
+
+          if (progress > 0.38) {
+            label.style.color = "#FFFFFF";
+          } else {
+            label.style.color = "#6E5D61";
+          }
+        }
+
+        function onStart(clientX) {
+          isDragging = true;
+          startX = clientX - currentX;
+          thumb.style.transition = "none";
+          fill.style.transition = "none";
+        }
+
+        function onMove(clientX) {
+          if (!isDragging) return;
+          const maxTravel = track.clientWidth - thumb.clientWidth - 12;
+          let nextX = clientX - startX;
+          nextX = Math.max(0, Math.min(nextX, maxTravel));
+          currentX = nextX;
+          const progress = maxTravel > 0 ? currentX / maxTravel : 0;
+          updateVisuals(progress);
+
+          if (progress >= 0.86) {
+            isDragging = false;
+            updateVisuals(1);
+            setTimeout(() => {
+              goToStep(2);
+              // Qayta ochilganda slayderni joyiga qaytarish
+              setTimeout(() => {
+                currentX = 0;
+                updateVisuals(0);
+              }, 500);
+            }, 220);
+          }
+        }
+
+        function onEnd() {
+          if (!isDragging) return;
+          isDragging = false;
+          thumb.style.transition = "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
+          fill.style.transition = "width 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
+          currentX = 0;
+          updateVisuals(0);
+        }
+
+        // Sichqoncha hodisalari
+        thumb.addEventListener("mousedown", (e) => onStart(e.clientX));
+        window.addEventListener("mousemove", (e) => onMove(e.clientX));
+        window.addEventListener("mouseup", onEnd);
+
+        // Sensor (Touch) hodisalari
+        thumb.addEventListener("touchstart", (e) => {
+          if (e.touches.length > 0) onStart(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener("touchmove", (e) => {
+          if (isDragging && e.touches.length > 0) onMove(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener("touchend", onEnd);
+      }
+
+      // --- 2-BOSQICH: QOCHUVCHI "YO'Q" TUGMASI ---
+      function initEvasiveNoButton() {
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const counterEl = document.getElementById("dodgeCounter");
+        const card = document.getElementById("step2");
+
+        const funnyPhrases = [
+          "Aniqmi?",
+          "Juda iltimos qilsam-chi?",
+          "Yana bir bor o‘ylab ko‘rasizmi?",
+          "Baribir rozisiz-ku 😉",
+          "Bu tugma ishlamaydi ❤️",
+          "Faqat HA tugmasi qoldi 😄"
+        ];
+
+        function dodgeAction(e) {
+          if (e) e.preventDefault();
+          dodgeCount++;
+          
+          // Hisoblagichni yangilash (+010, +020...)
+          const score = dodgeCount * 10;
+          counterEl.textContent = "+" + String(score).padStart(3, "0");
+          counterEl.classList.add("text-[#B8294A]", "border-[#B8294A]/30");
+
+          // Matnni o'zgartirish
+          const phrase = funnyPhrases[(dodgeCount - 1) % funnyPhrases.length];
+          noBtn.textContent = phrase;
+
+          // HA tugmasini biroz kattalashtirish
+          const scale = Math.min(1 + dodgeCount * 0.055, 1.35);
+          yesBtn.style.transform = `scale(${scale})`;
+
+          // Karta ichida tasodifiy xavfsiz koordinataga sakratish
+          const cardRect = card.getBoundingClientRect();
+          const btnWidth = noBtn.offsetWidth || 120;
+          const btnHeight = noBtn.offsetHeight || 44;
+
+          const maxOffsetX = Math.max(40, (cardRect.width - btnWidth) / 2 - 16);
+          const randomX = (Math.random() * 2 - 1) * maxOffsetX;
+          const randomY = (Math.random() * 140) - 95; // Yuqoriga yoki pastga sakrash
+
+          noBtn.style.position = "relative";
+          noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        noBtn.addEventListener("mouseenter", dodgeAction);
+        noBtn.addEventListener("touchstart", dodgeAction, { passive: false });
+        noBtn.addEventListener("click", dodgeAction);
+
+        yesBtn.addEventListener("click", () => {
+          launchHeartBurst();
+          goToStep(3);
+        });
+      }
+
+      // Kichik yurakchalar salyuti
+      function launchHeartBurst() {
+        for (let i = 0; i < 24; i++) {
+          const heart = document.createElement("div");
+          heart.textContent = "♥";
+          heart.style.position = "fixed";
+          heart.style.left = "50%";
+          heart.style.top = "50%";
+          heart.style.color = i % 2 === 0 ? "#B8294A" : "#F47291";
+          heart.style.fontSize = (14 + Math.random() * 16) + "px";
+          heart.style.pointerEvents = "none";
+          heart.style.zIndex = "100";
+          heart.style.transition = "all 0.9s cubic-bezier(0.16, 1, 0.3, 1)";
+          document.body.appendChild(heart);
+
+          const angle = (Math.PI * 2 * i) / 24;
+          const dist = 80 + Math.random() * 160;
+          requestAnimationFrame(() => {
+            heart.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist - 40}px) scale(0.4)`;
+            heart.style.opacity = "0";
+          });
+
+          setTimeout(() => heart.remove(), 950);
+        }
+      }
+
+      // --- 4-BOSQICH: SANA VA VAQT TANLASH ---
+      function renderDateOptions() {
+        const container = document.getElementById("dateOptionsList");
+        container.innerHTML = "";
+
+        appConfig.dates.forEach((item, idx) => {
+          const isSelected = idx === 2; // Standart 3-variant
+          if (isSelected) selectedDateObj = { ...item };
+
+          const card = document.createElement("label");
+          card.className = `date-radio-card flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+            isSelected
+              ? "bg-white border-[#B8294A] shadow-sm"
+              : "bg-white/75 border-[#E6DCD2] hover:bg-white"
+          }`;
+
+          card.innerHTML = `
+            <div>
+              <div class="text-sm font-semibold text-[#2D1E22]">${escapeHtml(item.date)}</div>
+              <div class="text-xs text-[#8E7D81] flex items-center gap-1 mt-0.5">
+                <span>🕒</span>
+                <span>${escapeHtml(item.time)}</span>
+              </div>
+            </div>
+            <input type="radio" name="dateChoice" value="${idx}" ${isSelected ? "checked" : ""} class="sr-only">
+            <span class="radio-dot w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+              isSelected ? "border-[#B8294A] bg-[#B8294A]" : "border-[#D4C6BA] bg-transparent"
+            }">
+              <span class="w-2 h-2 rounded-full bg-white ${isSelected ? "opacity-100" : "opacity-0"}"></span>
+            </span>
+          `;
+
+          card.addEventListener("click", () => {
+            selectDateCard(idx);
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      function selectDateCard(selectedIndex) {
+        const cards = document.querySelectorAll(".date-radio-card");
+        const customWrapper = document.getElementById("customDateWrapper");
+        const customInputs = document.getElementById("customDateInputs");
+        const customCheck = document.getElementById("customDateCheck");
+
+        // Custom bo'limini yopish
+        customWrapper.classList.remove("border-[#B8294A]", "bg-white");
+        customWrapper.classList.add("border-[#E6DCD2]", "bg-white/80");
+        customInputs.classList.add("hidden");
+        customInputs.classList.remove("grid");
+        customCheck.classList.remove("border-[#B8294A]", "bg-[#B8294A]");
+        customCheck.classList.add("border-[#D4C6BA]");
+        customCheck.firstElementChild.classList.add("opacity-0");
+
+        cards.forEach((c, i) => {
+          const dot = c.querySelector(".radio-dot");
+          const inner = dot.firstElementChild;
+          if (i === selectedIndex) {
+            c.classList.add("bg-white", "border-[#B8294A]", "shadow-sm");
+            c.classList.remove("bg-white/75", "border-[#E6DCD2]");
+            dot.classList.add("border-[#B8294A]", "bg-[#B8294A]");
+            dot.classList.remove("border-[#D4C6BA]");
+            inner.classList.remove("opacity-0");
+            selectedDateObj = { ...appConfig.dates[i] };
+          } else {
+            c.classList.remove("bg-white", "border-[#B8294A]", "shadow-sm");
+            c.classList.add("bg-white/75", "border-[#E6DCD2]");
+            dot.classList.remove("border-[#B8294A]", "bg-[#B8294A]");
+            dot.classList.add("border-[#D4C6BA]");
+            inner.classList.add("opacity-0");
+          }
+        });
+      }
+
+      // O'ziga qulay vaqtni tanlash hodisasi
+      document.getElementById("customDateWrapper").addEventListener("click", (e) => {
+        if (e.target.tagName === "INPUT" && e.target.type !== "radio") return;
+
+        const cards = document.querySelectorAll(".date-radio-card");
+        cards.forEach((c) => {
+          const dot = c.querySelector(".radio-dot");
+          c.classList.remove("bg-white", "border-[#B8294A]", "shadow-sm");
+          c.classList.add("bg-white/75", "border-[#E6DCD2]");
+          dot.classList.remove("border-[#B8294A]", "bg-[#B8294A]");
+          dot.classList.add("border-[#D4C6BA]");
+          dot.firstElementChild.classList.add("opacity-0");
+        });
+
+        const customWrapper = document.getElementById("customDateWrapper");
+        const customInputs = document.getElementById("customDateInputs");
+        const customCheck = document.getElementById("customDateCheck");
+
+        customWrapper.classList.add("border-[#B8294A]", "bg-white");
+        customWrapper.classList.remove("border-[#E6DCD2]", "bg-white/80");
+        customInputs.classList.remove("hidden");
+        customInputs.classList.add("grid");
+        customCheck.classList.add("border-[#B8294A]", "bg-[#B8294A]");
+        customCheck.classList.remove("border-[#D4C6BA]");
+        customCheck.firstElementChild.classList.remove("opacity-0");
+
+        document.getElementById("customDateRadio").checked = true;
+      });
+
+      // --- 5-BOSQICH: MASHG'ULOTLAR GRIDI ---
+      function renderActivityOptions() {
+        const grid = document.getElementById("activitiesGrid");
+        grid.innerHTML = "";
+
+        appConfig.activities.forEach((act, idx) => {
+          const isSelected = idx === 0;
+          if (isSelected) selectedActivity = act;
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `activity-pill text-left px-4 py-3.5 rounded-2xl border text-xs sm:text-[13px] font-medium transition-all cursor-pointer ${
+            isSelected
+              ? "bg-[#B8294A] text-white border-[#B8294A] shadow-md shadow-[#B8294A]/20"
+              : "bg-white/85 text-[#2D1E22] border-[#E6DCD2] hover:bg-white"
+          }`;
+          btn.textContent = act;
+
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".activity-pill").forEach((p) => {
+              p.classList.remove("bg-[#B8294A]", "text-white", "border-[#B8294A]", "shadow-md", "shadow-[#B8294A]/20");
+              p.classList.add("bg-white/85", "text-[#2D1E22]", "border-[#E6DCD2]");
+            });
+            btn.classList.remove("bg-white/85", "text-[#2D1E22]", "border-[#E6DCD2]");
+            btn.classList.add("bg-[#B8294A]", "text-white", "border-[#B8294A]", "shadow-md", "shadow-[#B8294A]/20");
+            selectedActivity = act;
+          });
+
+          grid.appendChild(btn);
+        });
+      }
+
+      // Bosqichlar o'rtasidagi tugmalar
+      document.getElementById("goToStep4Btn").addEventListener("click", () => goToStep(4));
+
+      document.getElementById("goToStep5Btn").addEventListener("click", () => {
+        const isCustom = document.getElementById("customDateRadio").checked;
+        if (isCustom) {
+          const dVal = document.getElementById("customDateVal").value;
+          const tVal = document.getElementById("customTimeVal").value || "18:30";
+          if (!dVal) {
+            showToast("Iltimos, o‘zingizga qulay sanani tanlang");
+            return;
+          }
+          selectedDateObj = { date: formatUzbekDate(dVal), time: tVal };
+        }
+        document.getElementById("chosenDateBadge").textContent = `${selectedDateObj.date} • ${selectedDateObj.time}`;
+        goToStep(5);
+      });
+
+      document.getElementById("backToStep4Btn").addEventListener("click", () => goToStep(4));
+
+      // Izoh belgilar soni
+      document.getElementById("optionalNote").addEventListener("input", (e) => {
+        document.getElementById("charCount").textContent = e.target.value.length;
+      });
+
+      // Uchrashuvni tasdiqlash -> 6-bosqich + LocalStorage ga saqlash
+      document.getElementById("confirmDateBtn").addEventListener("click", () => {
+        const note = document.getElementById("optionalNote").value.trim();
+        const finalRecipient = visitorName || appConfig.recipient || "Noma'lum";
+
+        // Yakuniy xatni to'ldirish
+        document.getElementById("letterDate").textContent = selectedDateObj.date;
+        document.getElementById("letterTime").textContent = selectedDateObj.time;
+        document.getElementById("letterActivity").textContent = selectedActivity;
+
+        const noteRow = document.getElementById("letterNoteRow");
+        if (note) {
+          document.getElementById("letterNoteText").textContent = note;
+          noteRow.classList.remove("hidden");
+        } else {
+          noteRow.classList.add("hidden");
+        }
+
+        // Javobni Admin Panel uchun saqlash
+        saveResponseToStorage({
+          id: Date.now(),
+          timestamp: new Date().toLocaleString("uz-UZ"),
+          recipient: finalRecipient,
+          sender: appConfig.sender,
+          date: selectedDateObj.date,
+          time: selectedDateObj.time,
+          activity: selectedActivity,
+          note: note,
+          dodges: dodgeCount
+        });
+
+        launchHeartBurst();
+        goToStep(6);
+      });
+
+      // Natijani ulashish (Clipboard)
+      document.getElementById("shareResultBtn").addEventListener("click", () => {
+        const note = document.getElementById("optionalNote").value.trim();
+        const finalRecipient = visitorName || appConfig.recipient || "Mehmon";
+        let shareText = `💌 Uchrashuv tasdiqlandi!\n\n` +
+          `👤 Kim: ${finalRecipient}\n` +
+          `📅 Kun: ${selectedDateObj.date}\n` +
+          `🕒 Vaqt: ${selectedDateObj.time}\n` +
+          `✨ Reja: ${selectedActivity}\n`;
+        if (note) shareText += `💬 Izoh: "${note}"\n`;
+        shareText += `\n— ${appConfig.sender} uchun maxsus javob ❤️`;
+
+        copyTextToClipboard(shareText);
+      });
+
+      document.getElementById("restartBtn").addEventListener("click", () => {
+        dodgeCount = 0;
+        const counterEl = document.getElementById("dodgeCounter");
+        counterEl.textContent = "+000";
+        counterEl.classList.remove("text-[#B8294A]");
+        const noBtn = document.getElementById("noBtn");
+        noBtn.textContent = "Yo‘q";
+        noBtn.style.transform = "translate(0, 0)";
+        document.getElementById("yesBtn").style.transform = "scale(1)";
+        goToStep(0);
+      });
+
+      function formatUzbekDate(isoDate) {
+        const months = [
+          "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+          "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"
+        ];
+        const days = [
+          "Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"
+        ];
+        const d = new Date(isoDate + "T00:00:00");
+        if (isNaN(d.getTime())) return isoDate;
+        return `${d.getDate()}-${months[d.getMonth()]}, ${days[d.getDay()]}`;
+      }
+
+      // =========================================================
+      // ADMIN PANEL BOSHQARUVI
+      // =========================================================
+      const adminOverlay = document.getElementById("adminOverlay");
+      const adminLoginView = document.getElementById("adminLoginView");
+      const adminDashboardView = document.getElementById("adminDashboardView");
+      let isAdminAuthenticated = false;
+
+      function openAdminModal() {
+        adminOverlay.classList.remove("hidden");
+        adminOverlay.classList.add("flex");
+        if (isAdminAuthenticated) {
+          showAdminDashboard();
+        } else {
+          adminLoginView.classList.remove("hidden");
+          adminDashboardView.classList.add("hidden");
+          document.getElementById("adminPasswordInput").value = "";
+          document.getElementById("loginErrorMsg").classList.add("hidden");
+          setTimeout(() => document.getElementById("adminPasswordInput").focus(), 100);
+        }
+      }
+
+      function closeAdminModal() {
+        adminOverlay.classList.add("hidden");
+        adminOverlay.classList.remove("flex");
+      }
+
+      function showAdminDashboard() {
+        adminLoginView.classList.add("hidden");
+        adminDashboardView.classList.remove("hidden");
+        populateAdminForm();
+        renderResponsesList();
+      }
+
+      // Admin Panelga kirishning 3 ta usuli:
+      // 1) URL orqali (?admin=1 yoki #admin)
+      if (urlParams.get("admin") === "1" || window.location.hash === "#admin") {
+        setTimeout(openAdminModal, 200);
+      }
+
+      // 2) Klaviatura tugmalari (Alt + A yoki Ctrl + Shift + A)
+      window.addEventListener("keydown", (e) => {
+        if ((e.altKey && e.key.toLowerCase() === "a") || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a")) {
+          e.preventDefault();
+          openAdminModal();
+        }
+      });
+
+      // 3) Pastki "DREAMDAY" yozuvini 5 marta bosish
+      let footerClickCount = 0;
+      let footerClickTimer = null;
+      document.getElementById("secretAdminTrigger").addEventListener("click", () => {
+        footerClickCount++;
+        clearTimeout(footerClickTimer);
+        if (footerClickCount >= 5) {
+          footerClickCount = 0;
+          openAdminModal();
+        } else {
+          footerClickTimer = setTimeout(() => {
+            footerClickCount = 0;
+          }, 1800);
+        }
+      });
+
+      document.getElementById("closeAdminBtn").addEventListener("click", closeAdminModal);
+
+      // Parolni tekshirish
+      document.getElementById("adminLoginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const entered = document.getElementById("adminPasswordInput").value;
+        if (entered === appConfig.adminPassword) {
+          isAdminAuthenticated = true;
+          showAdminDashboard();
+          showToast("Admin panelga xush kelibsiz!");
+        } else {
+          document.getElementById("loginErrorMsg").classList.remove("hidden");
+        }
+      });
+
+      // Admin Tablarni almashtirish
+      document.querySelectorAll(".admin-tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".admin-tab-btn").forEach((b) => {
+            b.classList.remove("bg-[#FAF7F2]", "text-[#B8294A]", "border-t", "border-x", "border-[#EAE0D5]");
+            b.classList.add("text-[#7C6A6E]");
+          });
+          btn.classList.add("bg-[#FAF7F2]", "text-[#B8294A]", "border-t", "border-x", "border-[#EAE0D5]");
+          btn.classList.remove("text-[#7C6A6E]");
+
+          const tab = btn.getAttribute("data-tab");
+          if (tab === "settings") {
+            document.getElementById("tabSettings").classList.remove("hidden");
+            document.getElementById("tabResponses").classList.add("hidden");
+          } else {
+            document.getElementById("tabSettings").classList.add("hidden");
+            document.getElementById("tabResponses").classList.remove("hidden");
+            renderResponsesList();
+          }
+        });
+      });
+
+      // Formani joriy sozlamalar bilan to'ldirish
+      function populateAdminForm() {
+        document.getElementById("cfgRecipient").value = appConfig.recipient;
+        document.getElementById("cfgSender").value = appConfig.sender;
+        document.getElementById("cfgQuestionSub").value = appConfig.questionSub;
+
+        document.getElementById("cfgDate1").value = appConfig.dates[0]?.date || "";
+        document.getElementById("cfgTime1").value = appConfig.dates[0]?.time || "";
+        document.getElementById("cfgDate2").value = appConfig.dates[1]?.date || "";
+        document.getElementById("cfgTime2").value = appConfig.dates[1]?.time || "";
+        document.getElementById("cfgDate3").value = appConfig.dates[2]?.date || "";
+        document.getElementById("cfgTime3").value = appConfig.dates[2]?.time || "";
+
+        document.getElementById("cfgAct1").value = appConfig.activities[0] || "";
+        document.getElementById("cfgAct2").value = appConfig.activities[1] || "";
+        document.getElementById("cfgAct3").value = appConfig.activities[2] || "";
+        document.getElementById("cfgAct4").value = appConfig.activities[3] || "";
+
+        updateShareableLink();
+      }
+
+      function updateShareableLink() {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const rVal = document.getElementById("cfgRecipient").value.trim() || visitorName;
+        const sVal = document.getElementById("cfgSender").value.trim() || appConfig.sender;
+        const params = new URLSearchParams();
+        if (rVal) params.set("to", rVal);
+        if (sVal) params.set("from", sVal);
+        document.getElementById("shareableLinkBox").value = `${baseUrl}?${params.toString()}`;
+      }
+
+      document.getElementById("cfgRecipient").addEventListener("input", updateShareableLink);
+      document.getElementById("cfgSender").addEventListener("input", updateShareableLink);
+
+      document.getElementById("copyShareLinkBtn").addEventListener("click", () => {
+        copyTextToClipboard(document.getElementById("shareableLinkBox").value);
+      });
+
+      // Sozlamalarni saqlash
+      document.getElementById("saveAdminSettingsBtn").addEventListener("click", () => {
+        const newPass = document.getElementById("cfgNewPassword").value.trim();
+        const cfgRec = document.getElementById("cfgRecipient").value.trim();
+        const updatedConfig = {
+          recipient: cfgRec,
+          sender: document.getElementById("cfgSender").value.trim() || DEFAULT_CONFIG.sender,
+          questionSub: document.getElementById("cfgQuestionSub").value.trim() || DEFAULT_CONFIG.questionSub,
+          dates: [
+            {
+              date: document.getElementById("cfgDate1").value.trim() || DEFAULT_CONFIG.dates[0].date,
+              time: document.getElementById("cfgTime1").value.trim() || DEFAULT_CONFIG.dates[0].time
+            },
+            {
+              date: document.getElementById("cfgDate2").value.trim() || DEFAULT_CONFIG.dates[1].date,
+              time: document.getElementById("cfgTime2").value.trim() || DEFAULT_CONFIG.dates[1].time
+            },
+            {
+              date: document.getElementById("cfgDate3").value.trim() || DEFAULT_CONFIG.dates[2].date,
+              time: document.getElementById("cfgTime3").value.trim() || DEFAULT_CONFIG.dates[2].time
+            }
+          ],
+          activities: [
+            document.getElementById("cfgAct1").value.trim() || DEFAULT_CONFIG.activities[0],
+            document.getElementById("cfgAct2").value.trim() || DEFAULT_CONFIG.activities[1],
+            document.getElementById("cfgAct3").value.trim() || DEFAULT_CONFIG.activities[2],
+            document.getElementById("cfgAct4").value.trim() || DEFAULT_CONFIG.activities[3]
+          ],
+          adminPassword: newPass ? newPass : appConfig.adminPassword
+        };
+
+        if (cfgRec) {
+          visitorName = cfgRec;
+        }
+        saveConfig(updatedConfig);
+        document.getElementById("cfgNewPassword").value = "";
+        updateShareableLink();
+        showToast("Barcha o‘zgarishlar saqlandi!");
+      });
+
+      document.getElementById("resetDefaultBtn").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_CONFIG_KEY);
+        visitorName = "";
+        document.getElementById("visitorNameInput").value = "";
+        saveConfig(JSON.parse(JSON.stringify(DEFAULT_CONFIG)));
+        populateAdminForm();
+        showToast("Standart sozlamalar tiklandi");
+      });
+
+      // Javoblarni saqlash va ko'rsatish
+      function getResponses() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_RESPONSES_KEY)) || [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveResponseToStorage(entry) {
+        const list = getResponses();
+        list.unshift(entry);
+        localStorage.setItem(STORAGE_RESPONSES_KEY, JSON.stringify(list));
+        updateResponsesBadge();
+      }
+
+      function updateResponsesBadge() {
+        const count = getResponses().length;
+        document.getElementById("responsesCountBadge").textContent = count;
+      }
+
+      function renderResponsesList() {
+        const list = getResponses();
+        const container = document.getElementById("responsesListContainer");
+        updateResponsesBadge();
+
+        if (list.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-10 bg-white rounded-2xl border border-[#EAE0D5]">
+              <p class="text-sm text-[#7C6A6E]">Hozircha tasdiqlangan javoblar yo‘q.</p>
+              <p class="text-xs text-[#9B8B8F] mt-1">Taklifnoma oxirigacha to‘ldirilganda shu yerda ko‘rinadi.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = list.map((item) => `
+          <div class="bg-white border border-[#E6DCD2] rounded-2xl p-4 shadow-sm">
+            <div class="flex items-center justify-between border-b border-[#F2EAE2] pb-2 mb-2.5">
+              <span class="text-xs font-bold text-[#B8294A]">♥ ${escapeHtml(item.recipient)} rozilik berdi!</span>
+              <span class="text-[11px] text-[#8E7D81]">${escapeHtml(item.timestamp)}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs text-[#2D1E22] mb-2">
+              <div><span class="text-[#8E7D81]">Kun:</span> <strong>${escapeHtml(item.date)}</strong></div>
+              <div><span class="text-[#8E7D81]">Vaqt:</span> <strong>${escapeHtml(item.time)}</strong></div>
+              <div class="col-span-2"><span class="text-[#8E7D81]">Reja:</span> <strong>${escapeHtml(item.activity)}</strong></div>
+              <div class="col-span-2"><span class="text-[#8E7D81]">“Yo‘q” tugmasini bosishga urinishlar:</span> <strong>${item.dodges} marta</strong></div>
+            </div>
+            ${item.note ? `<div class="bg-[#FAF7F2] rounded-xl p-2.5 text-xs italic text-[#5C4B4F] border border-[#EDE4DA]">“${escapeHtml(item.note)}”</div>` : ""}
+          </div>
+        `).join("");
+      }
+
+      document.getElementById("clearResponsesBtn").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_RESPONSES_KEY);
+        renderResponsesList();
+        showToast("Javoblar ro‘yxati tozalandi");
+      });
+
+      // --- DASTURNI ISHGA TUSHIRISH ---
+      initFloatingHearts();
+      initNameEntry();
+      applyConfigToUI();
+      initSlider();
+      initEvasiveNoButton();
+      updateResponsesBadge();
+    })();
+  </script>
+</body>
+</html>
